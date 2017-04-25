@@ -1,0 +1,9 @@
+---
+  percona-cluster-bind-address: "::"
+  percona-cluster-name: "testcluster"
+  percona-cluster-expire-log-days: 8
+  percona-cluster-max-allowed-packet: "16M"
+  percona-cluster-sst-user: "testclusteruser"
+  percona-cluster-sst-password: "testclusterpassword"
+  percona-cluster-root-password: "changeme"
+  percona-cluster-version: "5.7"

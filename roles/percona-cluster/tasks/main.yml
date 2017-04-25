@@ -8,3 +8,25 @@
   - name: Update apt
     become: yes
     apt:  update_cache=yes
+
+  - name: Sets root password
+    debconf:
+      name: "percona-xtradb-cluster-{{ percona-cluster-version|replace('.','') }}"
+      question: "{{ item }}"
+      value: "{{ percona-cluster-root-password }}"
+      vtype: 'password'
+    changed_when: false
+    with_items:
+      - 'root_password'
+      - 'root_password_again'
+
+  - name: Sets root password again
+    debconf:
+      name: "percona-xtradb-cluster-server-{{ percona-cluster-version }}"
+      question: "percona-xtradb-cluster-server/{{ item }}"
+      value: "{{ percona-cluster-root-password }}"
+      vtype: 'password'
+    changed_when: false
+    with_items:
+      - 'root_password'
+      - 'root_password_again'
