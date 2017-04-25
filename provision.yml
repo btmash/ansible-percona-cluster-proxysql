@@ -3,4 +3,9 @@
 - hosts: database:proxy
   become: yes
   roles:
-    - init
+    # - init
+
+- hosts: database
+  become: yes
+  roles:
+    - percona-cluster
