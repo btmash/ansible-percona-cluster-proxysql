@@ -9,11 +9,27 @@
     become: yes
     apt:  update_cache=yes
 
+  - name: Install Python package manager on Ubuntu 16.04
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - python3-dev
+      - libmysqlclient-dev
+      - python3-pip
+
+  - name: Install the Python MySQLB module
+    pip:
+      name: "{{ item }}"
+    with_items:
+      - pip
+      - mysqlclient
+
   - name: Sets root password
     debconf:
-      name: "percona-xtradb-cluster-{{ percona-cluster-version|replace('.','') }}"
+      name: "percona-xtradb-cluster-{{ percona_cluster_version|replace('.','') }}"
       question: "{{ item }}"
-      value: "{{ percona-cluster-root-password }}"
+      value: "{{ percona_cluster_root_password }}"
       vtype: 'password'
     changed_when: false
     with_items:
@@ -22,11 +38,50 @@
 
   - name: Sets root password again
     debconf:
-      name: "percona-xtradb-cluster-server-{{ percona-cluster-version }}"
+      name: "percona-xtradb-cluster-server-{{ percona_cluster_version }}"
       question: "percona-xtradb-cluster-server/{{ item }}"
-      value: "{{ percona-cluster-root-password }}"
+      value: "{{ percona_cluster_root_password }}"
       vtype: 'password'
     changed_when: false
     with_items:
       - 'root_password'
       - 'root_password_again'
+
+  - name: Easy access for Root user
+    template:
+      src: 'root_my.cnf.j2'
+      dest: '/root/.my.cnf'
+
+  - name: Installs percona-server
+    apt:
+      pkg: "percona-xtradb-cluster-{{ percona_cluster_version|replace('.','') }}"
+      state: present
+
+  - name: Configure MySQL
+    template:
+      src: "my.cnf.j2"
+      dest: '/etc/mysql/my.cnf'
+
+  - name: Bootstrap percona cluster non-primary servers
+    command: service mysql bootstrap-pxc
+    when: "'database-master' in group_names"
+
+  - name: Add replication user
+    mysql_user:
+      priv: "*.*:GRANT,RELOAD,LOCK TABLES,PROCESS,REPLICATION CLIENT"
+      user: "{{ percona_cluster_sst_user }}"
+      password: "{{ percona_cluster_sst_password }}"
+      host: localhost
+    when: "'database-master' in group_names"
+
+  - name: Restart percona cluster
+    service:
+      name: mysql
+      state: restarted
+    when: "'database-master' not in group_names"
+
+  - name: Restart 'master'
+    service:
+      name: mysql
+      state: restarted
+    when: "'database-master' in group_names"
