@@ -1,0 +1,5 @@
+---
+
+sudoer_users:
+  - name: SOME_SUDO_USER
+    key: "SOME_SSH_KEY"
