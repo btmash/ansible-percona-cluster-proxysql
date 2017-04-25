@@ -1,0 +1,6 @@
+---
+
+- hosts: database:proxy
+  become: yes
+  roles:
+    - init
