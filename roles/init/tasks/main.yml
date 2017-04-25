@@ -1,0 +1,49 @@
+---
+  - name: Update apt
+    become: yes
+    apt:  update_cache=yes
+
+  - name: Upgrade all apt packages
+    become: yes
+    apt:  upgrade=dist
+
+  - name: Install system packages
+    become: yes
+    apt:  pkg={{ item }} state=latest
+    with_items: "{{ init_packages }}"
+
+  - name: Update apt again
+    become: yes
+    apt:  update_cache=yes
+
+  - name: Add deploy users
+    become: yes
+    user: name={{ item.name }} shell=/bin/bash groups=deploy,www-data append=yes
+    with_items: "{{ deploy_users }}"
+
+  - name: Add keys for deploy users
+    become: yes
+    authorized_key: user={{ item.name }} key="{{ item.key }}"
+    with_items: "{{ deploy_users }}"
+
+  - name: Add regular users
+    become: yes
+    user: name={{ item.name }} shell=/bin/bash password={{ item.password }} groups=deploy,www-data append=yes
+    with_items: "{{ regular_users }}"
+
+  - name: Add sudoer users
+    become: yes
+    user: name={{ item.name }} shell=/bin/bash groups=www-data append=yes
+    with_items: "{{ sudoer_users }}"
+
+  - name: Add keys for sudoer users
+    become: yes
+    authorized_key: user={{ item.name }} key="{{ item.key }}"
+    with_items: "{{ sudoer_users }}"
+
+  - name: Add sudoer users to sudoers file
+    become: yes
+    lineinfile:
+      dest: /etc/sudoers
+      line: "{{ item.name }} ALL=(ALL) NOPASSWD: ALL"
+    with_items: "{{ sudoer_users }}"

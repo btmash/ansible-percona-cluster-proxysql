@@ -1,0 +1,10 @@
+---
+
+  - name: Add percona repo
+    become: yes
+    apt:
+      deb: "https://repo.percona.com/apt/percona-release_0.1-4.xenial_all.deb"
+
+  - name: Update apt
+    become: yes
+    apt:  update_cache=yes
