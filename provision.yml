@@ -1,6 +1,6 @@
 ---
 
-- hosts: database:proxy
+- hosts: database:dbproxy
   become: yes
   roles:
     # - init
@@ -8,4 +8,9 @@
 - hosts: database
   become: yes
   roles:
-    - percona-cluster
+    # - percona-cluster
+
+- hosts: dbproxy
+  become: yes
+  roles:
+    - proxysql
