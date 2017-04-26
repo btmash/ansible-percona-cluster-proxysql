@@ -14,3 +14,6 @@
   ansible_python_interpreter: "/usr/bin/python3"
 
   percona_cluster_version: "5.7"
+
+  proxysql_monitor_username: "proxysql_monitor_admin"
+  proxysql_monitor_password: "proxysql_monitor_Adm1n"
