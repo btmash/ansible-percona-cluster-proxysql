@@ -1,0 +1,13 @@
+---
+
+proxysql_username: "proxysql_admin"
+proxysql_password: "proxysql_Adm1n"
+
+proxysql_cluster_username: "proxysql_cluster_admin"
+proxysql_cluster_password: "proxysql_cluster_Adm1n"
+
+proxysql_monitor_username: "proxysql_monitor_admin"
+proxysql_monitor_password: "proxysql_monitor_Adm1n"
+
+proxysql_cluster_app_username: "proxysql_cluster_app_admin"
+proxysql_cluster_app_password: "proxysql_cluster_app_Adm1n"

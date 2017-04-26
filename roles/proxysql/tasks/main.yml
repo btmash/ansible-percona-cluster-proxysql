@@ -1,0 +1,28 @@
+---
+
+  - name: Add percona repo
+    become: yes
+    apt:
+      deb: "https://repo.percona.com/apt/percona-release_0.1-4.xenial_all.deb"
+
+  - name: Update apt
+    become: yes
+    apt:  update_cache=yes
+
+  - name: Install Python package manager on Ubuntu 16.04
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - proxysql
+      - "percona-xtradb-cluster-client-{{ percona_cluster_version }}"
+
+  - name: Configure ProxySQL Admin
+    template:
+      src: "proxysql-admin.cfg.j2"
+      dest: '/etc/proxysql-admin.cfg'
+
+  - name: Configure ProxySQL.cnf
+    template:
+      src: "proxysql.cnf.j2"
+      dest: '/etc/proxysql.cnf'
