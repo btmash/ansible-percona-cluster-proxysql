@@ -1,5 +1,30 @@
 ---
 
-sudoer_users:
-  - name: SOME_SUDO_USER
-    key: "SOME_SSH_KEY"
+## THIS FILE WOULD BE ENCRYPTED USING ansible-vault BUT IS NOT FOR NOTES.
+
+  ## Unless you want me to have access to your application, I suggest you update this :)
+  sudoer_users:
+    - name: btmash
+      key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrhIiGPPO6OoQ72kvfamaFLivlDUuRRpH6LazM/5S8E65hgS+EDCWrSnhzFbcFphnGHObG1H2bjVCtQlbFC1Nzc+snhbIgoqKZTmNgYJ8fOZU7U7rUSrRWTVOiXG8bFtYwZgPdJEZpfZAnR6BhvdbzYIVwxI6fCCTGnYPmOilMvLwJmWhSCsC637Ftn25S4ek8EHClX4H8/pKE25jD5Na5EUfHOv5+nC+dAKKvAUzhB/6QDRG1nwONLcwBzLIYd/6oKwG/Vik2iNZJ2ouBH5CXJhsF74fGabuSd8QzuACx3DOvBBytVZHxA3ahu700rGtg8nLERTXRXzvmVeJIIiib"
+
+  proxysql_monitor_username: "proxysql_monitor_admin"
+  proxysql_monitor_password: "proxysql_monitor_Adm1n"
+
+  percona_cluster_application_databases:
+    - app1_test
+    - app2_test
+    - app3_test
+
+  percona_cluster_application_users:
+    - name: multi_app_user
+      priv: "app1_test.*:ALL/app2_test.*:ALL"
+      password: "multi_app_Adm1n"
+    - name: app1_user
+      priv: "*.app1_test:ALL"
+      password: "app1_Adm1n"
+    - name: app2_user
+      priv: "*.app2_test:ALL"
+      password: "app2_Adm1n"
+    - name: app3_user
+      priv: "*.app3_test:ALL"
+      password: "app3_Adm1n"
