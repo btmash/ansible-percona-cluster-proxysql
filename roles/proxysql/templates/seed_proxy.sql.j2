@@ -1,0 +1,5 @@
+DELETE FROM mysql_servers;
+{%- for node in groups['database'] %}
+  INSERT INTO mysql_servers(hostgroup_id, hostname, port) VALUES (0, {{ hostvars[node]['ansible_default_ipv4']['address'] }}, 3306);
+  {%- set _ = cluster_members.append(hostvars[node]['ansible_default_ipv4']['address']) -%}
+{% endfor -%}
