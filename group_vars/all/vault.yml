@@ -20,11 +20,11 @@
       priv: "app1_test.*:ALL/app2_test.*:ALL"
       password: "multi_app_Adm1n"
     - name: app1_user
-      priv: "*.app1_test:ALL"
+      priv: "app1_test.*:ALL"
       password: "app1_Adm1n"
     - name: app2_user
-      priv: "*.app2_test:ALL"
+      priv: "app2_test.*:ALL"
       password: "app2_Adm1n"
     - name: app3_user
-      priv: "*.app3_test:ALL"
+      priv: "app3_test.*:ALL"
       password: "app3_Adm1n"
