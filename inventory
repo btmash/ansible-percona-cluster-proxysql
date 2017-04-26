@@ -1,0 +1,16 @@
+db1 ansible_ssh_host=1.1.1.1
+db2 ansible_ssh_host=2.2.2.2
+db3 ansible_ssh_host=3.3.3.3
+
+proxy1 ansible_ssh_host=4.4.4.4
+
+[database-master]
+db1
+
+[database]
+db1
+db2
+db3
+
+[proxy]
+proxy1
