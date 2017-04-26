@@ -79,6 +79,14 @@
       host: localhost
     when: "'database-master' in group_names"
 
+  - name: Add proxysql monitoring user
+    mysql_user:
+      priv: "*.*:usage"
+      user: "{{ proxysql_monitor_username }}"
+      password: "{{ proxysql_monitor_password }}"
+      host: '%'
+    when: "'database-master' in group_names"
+
   - name: Stop all mysql servers
     service:
       name: mysql
