@@ -106,14 +106,16 @@
       user: "{{ proxysql_monitor_username }}"
       password: "{{ proxysql_monitor_password }}"
       host: "{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
-    with_items: groups.dbproxy
+    with_items:
+      - "{{ groups['dbproxy'] }}"
     run_once: yes
 
   - name: Add databases
     mysql_db:
-      name: "{{ item.name }}"
+      name: "{{ item }}"
       state: present
-    with_items: percona_cluster_application_databases
+    with_items:
+      - "{{ percona_cluster_application_databases }}"
     run_once: yes
 
   - name: Add database grants
@@ -124,6 +126,6 @@
       host: "{{ hostvars[item[1]]['ansible_default_ipv4']['address'] }}"
       state: present
     with_nested:
-      - percona_cluster_application_users
-      - groups.dbproxy
+      - "{{ percona_cluster_application_users }}"
+      - "{{ groups['dbproxy'] }}"
     run_once: yes
