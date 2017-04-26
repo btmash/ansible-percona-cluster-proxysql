@@ -78,14 +78,7 @@
       password: "{{ percona_cluster_sst_password }}"
       host: localhost
     when: "'database-master' in group_names"
-
-  - name: Add proxysql monitoring user
-    mysql_user:
-      priv: "*.*:usage"
-      user: "{{ proxysql_monitor_username }}"
-      password: "{{ proxysql_monitor_password }}"
-      host: '%'
-    when: "'database-master' in group_names"
+    run_once: yes
 
   - name: Stop all mysql servers
     service:
@@ -106,4 +99,31 @@
     service:
       name: mysql
       state: restarted
-    when: "'database-master' in group_names"
+
+  - name: Add proxysql monitoring user
+    mysql_user:
+      priv: "*.*:usage"
+      user: "{{ proxysql_monitor_username }}"
+      password: "{{ proxysql_monitor_password }}"
+      host: "{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
+    with_items: groups.dbproxy
+    run_once: yes
+
+  - name: Add databases
+    mysql_db:
+      name: "{{ item.name }}"
+      state: present
+    with_items: percona_cluster_application_databases
+    run_once: yes
+
+  - name: Add database grants
+    mysql_user:
+      priv: "{{ item[0].priv }}"
+      name: "{{ item[0].name }}"
+      password: "{{ item[0].password }}"
+      host: "{{ hostvars[item[1]]['ansible_default_ipv4']['address'] }}"
+      state: present
+    with_nested:
+      - percona_cluster_application_users
+      - groups.dbproxy
+    run_once: yes

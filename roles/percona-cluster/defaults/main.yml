@@ -7,3 +7,22 @@
   percona_cluster_sst_password: "testclusterpassword"
   percona_cluster_root_password: "changeme"
   percona_cluster_version: "5.7"
+
+  percona_cluster_application_databases:
+    - app1_test
+    - app2_test
+    - app3_test
+
+  percona_cluster_application_users:
+    - name: multi_app_user
+      priv: "app1_test.*:ALL/app2_test.*:ALL"
+      password: "multi_app_Adm1n"
+    - name: app1_user
+      priv: "*.app1_test:ALL"
+      password: "app1_Adm1n"
+    - name: app2_user
+      priv: "*.app2_test:ALL"
+      password: "app2_Adm1n"
+    - name: app3_user
+      priv: "*.app3_test:ALL"
+      password: "app3_Adm1n"
