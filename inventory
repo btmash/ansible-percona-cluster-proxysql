@@ -1,8 +1,8 @@
-db1 ansible_ssh_host=1.1.1.1
-db2 ansible_ssh_host=2.2.2.2
-db3 ansible_ssh_host=3.3.3.3
+db1 ansible_ssh_host=1.1.1.1 ansible_ssh_user=root
+db2 ansible_ssh_host=2.2.2.2 ansible_ssh_user=root
+db3 ansible_ssh_host=3.3.3.3 ansible_ssh_user=root
 
-proxy1 ansible_ssh_host=4.4.4.4
+proxy1 ansible_ssh_host=4.4.4.4 ansible_ssh_user=root
 
 [database-master]
 db1
@@ -12,5 +12,5 @@ db1
 db2
 db3
 
-[proxy]
+[dbproxy]
 proxy1
