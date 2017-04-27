@@ -38,4 +38,4 @@
       state: restarted
 
   - name: Update proxysql
-    command: "mysql -u {{ proxysql_username }} -p{{ proxysql_password }} -h 127.0.0.1 -P 6032 < /root/seed_proxy.sql"
+    shell: "mysql -u {{ proxysql_username }} -p{{ proxysql_password }} -h 127.0.0.1 -P 6032 < /root/seed_proxy.sql"
