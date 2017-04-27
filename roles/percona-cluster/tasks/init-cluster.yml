@@ -1,0 +1,46 @@
+---
+
+  - name: Stop all mysql servers
+    service:
+      name: mysql
+      state: stopped
+
+  - name: Bootstrap percona cluster non-primary servers
+    command: service mysql bootstrap-pxc
+    when: "'database-master' in group_names"
+
+  - name: Add replication user
+    mysql_user:
+      priv: "*.*:GRANT,RELOAD,LOCK TABLES,PROCESS,REPLICATION CLIENT"
+      user: "{{ percona_cluster_sst_user }}"
+      password: "{{ percona_cluster_sst_password }}"
+      host: localhost
+    when: "'database-master' in group_names"
+    run_once: yes
+
+  - name: Stop all mysql servers
+    service:
+      name: mysql
+      state: stopped
+
+  - name: Bootstrap percona cluster non-primary servers
+    command: service mysql bootstrap-pxc
+    when: "'database-master' in group_names"
+
+  - name: Restart percona cluster
+    service:
+      name: mysql
+      state: restarted
+    when: "'database-master' not in group_names"
+
+  - name: Restart 'master'
+    service:
+      name: mysql
+      state: restarted
+    when: "'database-master' in group_names"
+
+
+  - name: Touch cluster_initialized file on each servers
+    file:
+      path: /etc/mysql/cluster_initialized
+      state: touch
