@@ -7,7 +7,7 @@ DELETE FROM mysql_servers;
 
 # This updates the monitor username/pass
 UPDATE global_variables SET variable_value='{{ proxysql_monitor_username }}' WHERE variable_name='mysql-monitor_username';
-UPDATE global_variables SET variable_value='{{ proxysql_monitor_username }}' WHERE variable_name='mysql-monitor_password';
+UPDATE global_variables SET variable_value='{{ proxysql_monitor_password }}' WHERE variable_name='mysql-monitor_password';
 LOAD MYSQL VARIABLES TO RUNTIME;
 SAVE MYSQL VARIABLES TO DISK;
 LOAD MYSQL SERVERS TO RUNTIME;
