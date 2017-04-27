@@ -1,7 +1,8 @@
 # This adds mysql servers
 DELETE FROM mysql_servers;
+
 {%- for node in groups['database'] %}
-  INSERT INTO mysql_servers(hostgroup_id, hostname, port) VALUES (0, {{ hostvars[node]['ansible_default_ipv4']['address'] }}, 3306);
+  INSERT INTO mysql_servers(hostgroup_id, hostname, port) VALUES (0, '{{ hostvars[node]['ansible_default_ipv4']['address'] }}', 3306);
 {% endfor -%}
 
 # This updates the monitor username/pass
@@ -11,7 +12,13 @@ LOAD MYSQL VARIABLES TO RUNTIME;
 SAVE MYSQL VARIABLES TO DISK;
 LOAD MYSQL SERVERS TO RUNTIME;
 
-#TODO: Add the Cluster users to access this
+# Add the Cluster users to access this
+DELETE FROM mysql_users;
+
+{%- for app_user in percona_cluster_application_users %}
+  INSERT INTO mysql_users (username,password) VALUES ('{{ app_user.name }}', '{{ app_user.password }}');
+{% endfor -%}
+LOAD MYSQL USERS TO RUNTIME;
 
 # This updates the scheduler
 DELETE FROM scheduler;

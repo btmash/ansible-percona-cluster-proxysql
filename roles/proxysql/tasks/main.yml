@@ -26,3 +26,16 @@
     template:
       src: "proxysql.cnf.j2"
       dest: '/etc/proxysql.cnf'
+
+  - name: Copy proxy seed
+    template:
+      src: "seed_proxy.sql.j2"
+      dest: '/root/seed_proxy.sql'
+
+  - name: Restart proxysql
+    service:
+      name: proxysql
+      state: restarted
+
+  - name: Update proxysql
+    command: "mysql -u {{ proxysql_username }} -p{{ proxysql_password }} -h 127.0.0.1 -P 6032 < /root/seed_proxy.sql"
