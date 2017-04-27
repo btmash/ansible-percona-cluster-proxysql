@@ -20,7 +20,7 @@
   - name: Configure ProxySQL Admin
     template:
       src: "proxysql-admin.cfg.j2"
-      dest: '/etc/proxysql-admin.cfg'
+      dest: '/etc/proxysql-admin.cnf'
 
   - name: Configure ProxySQL.cnf
     template:
